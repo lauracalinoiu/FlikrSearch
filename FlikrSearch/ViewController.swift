@@ -10,6 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var imageview: UIImageView!
+    @IBOutlet weak var titleForSearch: UITextField!
+    @IBOutlet weak var latitudeForSearch: UITextField!
+    @IBOutlet weak var longitude: UITextField!
+    @IBOutlet weak var imgeLabelFromFlikr: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
