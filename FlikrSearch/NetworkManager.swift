@@ -24,7 +24,7 @@ class NetworkManager{
     
     
     let url = "https://api.flickr.com/services/rest/"
-    let dictionaryParameterString = ["method":"flickr.photos.search", "api_key":"ea3e25e77036b4f9fdca2dfd65a8b8fa", "text":"baby asian elephant", "format":"json", "nojsoncallback":"1", "extras":"url_m"]
+    let dictionaryParameterString = ["method":"flickr.photos.search", "api_key":"ea3e25e77036b4f9fdca2dfd65a8b8fa", "text":"fdafda", "format":"json", "nojsoncallback":"1", "extras":"url_m"]
     
     var request: NSURLRequest!
     var urlSession: NSURLSession!
@@ -72,22 +72,38 @@ class NetworkManager{
         let photosFromRequest = dictionary.objectForKey("photos") as! [String: AnyObject]
         let howManyPhotos = photosFromRequest["total"] as? String
         
-        if let _ = Int(howManyPhotos!){
-            let photos = photosFromRequest["photo"] as! [[String:AnyObject]]
-            let index = chooseOneRandomIndexWithMaximum(photos.count)
-            
-            let photoToBeShownWithAllData = photos[index] as [String:AnyObject]
-            let photoToBeShownUrl = NSURL(string: photoToBeShownWithAllData["url_m"] as! String)
-            
-            let titleOfImage = photoToBeShownWithAllData["title"] as? String
-            
-            getDataFromURL(photoToBeShownUrl!){ data in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.uxDelegate.updateView(data!, title: titleOfImage!)
+        if let numberOfPhotos = Int(howManyPhotos!){
+            if numberOfPhotos != 0{
+                if let photos = photosFromRequest["photo"] as? [[String:AnyObject]] {
+                    let index = chooseOneRandomIndexWithMaximum(photos.count)
+                    let photoToBeShownWithAllData = photos[index] as [String:AnyObject]
+                    
+                    let photoToBeShownUrl = NSURL(string: photoToBeShownWithAllData["url_m"] as! String)
+                    let titleOfImage = photoToBeShownWithAllData["title"] as? String
+                    
+                    if let imageData = NSData(contentsOfURL: photoToBeShownUrl!){
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.uxDelegate.updateView(imageData, title: titleOfImage!)
+                        })
+                    } else {
+                        print("image does not exist at \(photoToBeShownUrl)")
+                    }
+                }
+                else{
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.uxDelegate.printErr("No 'photo' tag, err at parsing")
+                    })
+                }
+            }
+            else{
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.uxDelegate.printErr("Sorry, no photos!")
                 })
             }
         }else {
-            self.uxDelegate.printErr("Sorry, no photos! ")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.uxDelegate.printErr("Sorry, no photos! ")
+            })
         }
     }
     

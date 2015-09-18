@@ -38,6 +38,7 @@ class ViewController: UIViewController, UXDelegate {
     
     func printErr(err: String) {
         self.imgeLabelFromFlikr.text = err
+        self.imageview.image = nil
     }
 }
 
