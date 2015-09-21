@@ -13,6 +13,41 @@ protocol UXDelegate{
     func printErr(err: String)
 }
 
+
+let URL = "https://api.flickr.com/services/rest/"
+let DICTIONARYPARAMETER = ["method":"flickr.photos.search",
+    "api_key":"ea3e25e77036b4f9fdca2dfd65a8b8fa",
+    "text":"fdafda",
+    "format":"json",
+    "nojsoncallback":"1",
+    "extras":"url_m"]
+
+let PARSE_ERROR_MESSAGE = "Sorry, but there was an error getting data from API"
+let NO_PHOTOS_MESSAGE = "Sorry, but there are no photos matching criteria"
+
+
+struct ConnectionCooker{
+    
+    static func prepareConnection() -> (NSURLRequest, NSURLSession){
+        let request = NSURLRequest(URL: getURLFormated())
+        let urlSession = NSURLSession.sharedSession()
+        
+        return (request, urlSession)
+    }
+    
+    static func getURLFormated() -> NSURL{
+        let parameterString = encodeParameters(DICTIONARYPARAMETER)
+        return  NSURL(string: "\(URL)?\(parameterString)")!
+    }
+    
+    static func encodeParameters(param:[String: String]) -> String{
+        let queryItems = param.map({NSURLQueryItem(name: $0, value: $1)})
+        let components = NSURLComponents()
+        components.queryItems = queryItems
+        return components.percentEncodedQuery ?? ""
+    }
+}
+
 class NetworkManager{
     
     class var sharedInstance: NetworkManager{
@@ -22,34 +57,11 @@ class NetworkManager{
         return Singleton.instance
     }
     
-    
-    let url = "https://api.flickr.com/services/rest/"
-    let dictionaryParameterString = ["method":"flickr.photos.search", "api_key":"ea3e25e77036b4f9fdca2dfd65a8b8fa", "text":"fdafda", "format":"json", "nojsoncallback":"1", "extras":"url_m"]
-    
-    var request: NSURLRequest!
-    var urlSession: NSURLSession!
     var uxDelegate: UXDelegate!
     
     func connectToAPIandGetDataWithCompletion(){
-        prepareConnection()
+        let (request, urlSession) = ConnectionCooker.prepareConnection()
         taskForRequest(urlSession, request: request)
-    }
-    
-    func prepareConnection(){
-        request = NSURLRequest(URL: getURLFormated())
-        urlSession = NSURLSession.sharedSession()
-    }
-    
-    func getURLFormated() -> NSURL{
-        let parameterString = encodeParameters(dictionaryParameterString)
-        return  NSURL(string: "\(url)?\(parameterString)")!
-    }
-    
-    func encodeParameters(param:[String: String]) -> String{
-        let queryItems = param.map({NSURLQueryItem(name: $0, value: $1)})
-        let components = NSURLComponents()
-        components.queryItems = queryItems
-        return components.percentEncodedQuery ?? ""
     }
     
     func taskForRequest(session: NSURLSession, request: NSURLRequest){
@@ -69,52 +81,59 @@ class NetworkManager{
     
     func parseJSON(dictionary: NSDictionary){
         
-        let photosFromRequest = dictionary.objectForKey("photos") as! [String: AnyObject]
-        let howManyPhotos = photosFromRequest["total"] as? String
+        guard let photosFromRequest = dictionary.objectForKey("photos") as? [String: AnyObject] else{
+            dealWithMessagesToMainQueue(PARSE_ERROR_MESSAGE)
+            print("Err with photos tag ")
+            return
+        }
         
-        if let numberOfPhotos = Int(howManyPhotos!){
-            if numberOfPhotos != 0{
-                if let photos = photosFromRequest["photo"] as? [[String:AnyObject]] {
-                    let index = chooseOneRandomIndexWithMaximum(photos.count)
-                    let photoToBeShownWithAllData = photos[index] as [String:AnyObject]
-                    
-                    let photoToBeShownUrl = NSURL(string: photoToBeShownWithAllData["url_m"] as! String)
-                    let titleOfImage = photoToBeShownWithAllData["title"] as? String
-                    
-                    if let imageData = NSData(contentsOfURL: photoToBeShownUrl!){
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.uxDelegate.updateView(imageData, title: titleOfImage!)
-                        })
-                    } else {
-                        print("image does not exist at \(photoToBeShownUrl)")
-                    }
-                }
-                else{
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.uxDelegate.printErr("No 'photo' tag, err at parsing")
-                    })
-                }
+        guard let howManyPhotos = Int(photosFromRequest["total"] as! String) else{
+            dealWithMessagesToMainQueue(PARSE_ERROR_MESSAGE)
+            print("Err with getting total tag")
+            return
+        }
+        
+        print("total photos \(howManyPhotos)")
+        if howManyPhotos != 0{
+            
+            guard let photos = photosFromRequest["photo"] as? [[String:AnyObject]] else{
+                dealWithMessagesToMainQueue(PARSE_ERROR_MESSAGE)
+                print("Err with getting photo tag")
+                return
             }
-            else{
+            let index = Int(arc4random_uniform(UInt32(photos.count)))
+            let photoToBeShownWithAllData = photos[index]
+        
+            guard let photoToBeShownUrl = NSURL(string: photoToBeShownWithAllData["url_m"] as! String) else{
+                dealWithMessagesToMainQueue(PARSE_ERROR_MESSAGE)
+                print("Err with getting random photo url")
+                return
+            }
+            
+            guard let titleOfImage = photoToBeShownWithAllData["title"] as? String else{
+                dealWithMessagesToMainQueue(PARSE_ERROR_MESSAGE)
+                print("Err with getting title of random photo")
+                return
+            }
+            
+            if let imageData = NSData(contentsOfURL: photoToBeShownUrl){
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.uxDelegate.printErr("Sorry, no photos!")
+                    self.uxDelegate.updateView(imageData, title: titleOfImage)
                 })
+            } else {
+                print("image does not exist at \(photoToBeShownUrl)")
+                dealWithMessagesToMainQueue(PARSE_ERROR_MESSAGE)
             }
-        }else {
-            dispatch_async(dispatch_get_main_queue(), {
-                self.uxDelegate.printErr("Sorry, no photos! ")
-            })
+        }
+        else{
+            dealWithMessagesToMainQueue(NO_PHOTOS_MESSAGE)
         }
     }
     
-    func chooseOneRandomIndexWithMaximum(max: Int) -> Int{
-        return Int(arc4random_uniform(UInt32(max)))
+    func dealWithMessagesToMainQueue(message: String){
+        dispatch_async(dispatch_get_main_queue(), {
+            self.uxDelegate.printErr(message)
+        })
+        
     }
-    
-    func getDataFromURL(url: NSURL, completion: ((data: NSData?) -> Void)){
-        NSURLSession.sharedSession().dataTaskWithURL(url){ (data, response, error) in
-            completion(data: data)
-            }.resume()
-    }
-    
 }
