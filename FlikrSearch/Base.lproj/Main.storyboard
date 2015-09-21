@@ -103,7 +103,7 @@
                                     <action selector="searchByLatLongTitleButtonTouchUpEvent:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OA5-ey-O0O"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No-Photo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mWU-Y5-8eZ" userLabel="No-Photo">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No-Photo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mWU-Y5-8eZ" userLabel="No-Photo">
                                 <rect key="frame" x="263" y="210" width="75" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -122,7 +122,7 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trandafiri in apa" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ub-pn-3YT">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a search item, and then hit the button to reveal the Flickr abundance!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ub-pn-3YT">
                                 <rect key="frame" x="31" y="484" width="538" height="81"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="81" id="1lI-LM-9Si"/>
@@ -200,6 +200,7 @@
                             <constraint firstItem="kmH-mK-dKV" firstAttribute="baseline" secondItem="L6f-Oi-9Se" secondAttribute="baseline" id="yBS-Sl-WTQ"/>
                             <constraint firstItem="kmH-mK-dKV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="92" id="yQA-eo-fm3"/>
                             <constraint firstItem="3cj-v7-13E" firstAttribute="trailing" secondItem="9ih-13-mKH" secondAttribute="trailing" id="yUx-ne-wZN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="1Ub-pn-3YT" secondAttribute="trailing" constant="11" id="yhx-1z-v5h"/>
                             <constraint firstItem="kmH-mK-dKV" firstAttribute="leading" secondItem="tSE-7g-bZa" secondAttribute="leading" id="zgq-Ac-rNa"/>
                         </constraints>
                         <variation key="default">

@@ -87,13 +87,19 @@ class ViewController: UIViewController, UXDelegate, UITextFieldDelegate {
     }
     
     @IBAction func searchByImageTitleButtonTouchUpEvent(sender: UIButton) {
+        titleTextField.resignFirstResponder()
         networkManagerInstance.connectToAPIandGetDataWithCompletion({
             $0.textToSearch = self.titleTextField.text
         })
     }
     
     @IBAction func searchByLatLongTitleButtonTouchUpEvent(sender: UIButton) {
-        
+        latitudeTextField.resignFirstResponder()
+        longitudeTextField.resignFirstResponder()
+        networkManagerInstance.connectToAPIandGetDataWithCompletion({
+            $0.latitudeToSearch = self.latitudeTextField.text
+            $0.longitudeToSearch = self.longitudeTextField.text
+        })
     }
     
     
