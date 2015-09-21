@@ -13,6 +13,8 @@
 		D3165B281BA7F4A100CFF1A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3165B271BA7F4A100CFF1A4 /* Assets.xcassets */; };
 		D3165B2B1BA7F4A100CFF1A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3165B291BA7F4A100CFF1A4 /* LaunchScreen.storyboard */; };
 		D394F9F41BAAB4B800D1E086 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394F9F31BAAB4B800D1E086 /* NetworkManager.swift */; settings = {ASSET_TAGS = (); }; };
+		D3E8928C1BAFF597001EC7F6 /* ConnectionCooker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8928B1BAFF597001EC7F6 /* ConnectionCooker.swift */; settings = {ASSET_TAGS = (); }; };
+		D3E8928E1BAFF607001EC7F6 /* BboxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8928D1BAFF607001EC7F6 /* BboxCalculator.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		D3165B2A1BA7F4A100CFF1A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D3165B2C1BA7F4A100CFF1A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D394F9F31BAAB4B800D1E086 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		D3E8928B1BAFF597001EC7F6 /* ConnectionCooker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionCooker.swift; sourceTree = "<group>"; };
+		D3E8928D1BAFF607001EC7F6 /* BboxCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BboxCalculator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 				D3165B221BA7F4A100CFF1A4 /* ViewController.swift */,
 				D3165B241BA7F4A100CFF1A4 /* Main.storyboard */,
 				D394F9F31BAAB4B800D1E086 /* NetworkManager.swift */,
+				D3E8928B1BAFF597001EC7F6 /* ConnectionCooker.swift */,
+				D3E8928D1BAFF607001EC7F6 /* BboxCalculator.swift */,
 				D3165B271BA7F4A100CFF1A4 /* Assets.xcassets */,
 				D3165B291BA7F4A100CFF1A4 /* LaunchScreen.storyboard */,
 				D3165B2C1BA7F4A100CFF1A4 /* Info.plist */,
@@ -138,8 +144,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E8928C1BAFF597001EC7F6 /* ConnectionCooker.swift in Sources */,
 				D394F9F41BAAB4B800D1E086 /* NetworkManager.swift in Sources */,
 				D3165B231BA7F4A100CFF1A4 /* ViewController.swift in Sources */,
+				D3E8928E1BAFF607001EC7F6 /* BboxCalculator.swift in Sources */,
 				D3165B211BA7F4A100CFF1A4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,40 +13,8 @@ protocol UXDelegate{
     func printErr(err: String)
 }
 
-
-let URL = "https://api.flickr.com/services/rest/"
-let DICTIONARYPARAMETER = ["method":"flickr.photos.search",
-    "api_key":"ea3e25e77036b4f9fdca2dfd65a8b8fa",
-    "text":"fdafda",
-    "format":"json",
-    "nojsoncallback":"1",
-    "extras":"url_m"]
-
 let PARSE_ERROR_MESSAGE = "Sorry, but there was an error getting data from API"
 let NO_PHOTOS_MESSAGE = "Sorry, but there are no photos matching criteria"
-
-
-struct ConnectionCooker{
-    
-    static func prepareConnection() -> (NSURLRequest, NSURLSession){
-        let request = NSURLRequest(URL: getURLFormated())
-        let urlSession = NSURLSession.sharedSession()
-        
-        return (request, urlSession)
-    }
-    
-    static func getURLFormated() -> NSURL{
-        let parameterString = encodeParameters(DICTIONARYPARAMETER)
-        return  NSURL(string: "\(URL)?\(parameterString)")!
-    }
-    
-    static func encodeParameters(param:[String: String]) -> String{
-        let queryItems = param.map({NSURLQueryItem(name: $0, value: $1)})
-        let components = NSURLComponents()
-        components.queryItems = queryItems
-        return components.percentEncodedQuery ?? ""
-    }
-}
 
 class NetworkManager{
     
@@ -59,8 +27,8 @@ class NetworkManager{
     
     var uxDelegate: UXDelegate!
     
-    func connectToAPIandGetDataWithCompletion(){
-        let (request, urlSession) = ConnectionCooker.prepareConnection()
+    func connectToAPIandGetDataWithCompletion(buildConnection: (ConnectionCooker) -> Void){
+        let (request, urlSession) = ConnectionCooker(build: buildConnection).prepareConnection()
         taskForRequest(urlSession, request: request)
     }
     

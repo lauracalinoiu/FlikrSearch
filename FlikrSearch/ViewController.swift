@@ -87,7 +87,9 @@ class ViewController: UIViewController, UXDelegate, UITextFieldDelegate {
     }
     
     @IBAction func searchByImageTitleButtonTouchUpEvent(sender: UIButton) {
-        networkManagerInstance.connectToAPIandGetDataWithCompletion()
+        networkManagerInstance.connectToAPIandGetDataWithCompletion({
+            $0.textToSearch = self.titleTextField.text
+        })
     }
     
     @IBAction func searchByLatLongTitleButtonTouchUpEvent(sender: UIButton) {
